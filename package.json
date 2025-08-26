@@ -34,7 +34,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "sharp": "^0.32.1"
+    "jimp": "^1.6.0"
   },
   "devDependencies": {
     "@types/jest": "^29.0.0",

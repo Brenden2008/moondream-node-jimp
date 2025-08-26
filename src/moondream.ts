@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import sharp from 'sharp';
+import * as Jimp from 'jimp';
 import http from 'http';
 import https from 'https';
 import { version } from '../package.json';
@@ -43,18 +43,18 @@ export class vl {
     }
 
     try {
-      // Process image with Sharp
-      const metadata = await sharp(image).metadata();
+  // Process image with Jimp
+  const jimpImage = await (Jimp as any).read(image as Buffer);
 
-      if (!metadata.width || !metadata.height) {
+      const width = jimpImage.bitmap?.width;
+      const height = jimpImage.bitmap?.height;
+
+      if (!width || !height) {
         throw new Error('Unable to get image dimensions');
       }
 
-      let processedImage = sharp(image);
-
-      const buffer = await processedImage
-        .toFormat('jpeg', { quality: 95 })
-        .toBuffer();
+  jimpImage.quality(95);
+  const buffer = await jimpImage.getBufferAsync('image/jpeg');
 
       const base64Image = buffer.toString('base64');
       return {
